@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>🧠 Akciós Potenciál Szimulátor</title>
+    <title>🧠 Akciós Potenciál Szimulátor - Premium</title>
     <style>
         * {
             margin: 0;
@@ -11,171 +11,343 @@
             box-sizing: border-box;
         }
 
+        :root {
+            --primary: #00d4ff;
+            --accent: #ff6b9d;
+            --dark: #0a0e27;
+            --card: rgba(15, 23, 42, 0.85);
+            --text: #e0e7ff;
+            --text-secondary: #a5b4fc;
+            --border: rgba(0, 212, 255, 0.2);
+        }
+
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            font-family: 'Segoe UI', sans-serif;
+            background: linear-gradient(135deg, var(--dark) 0%, #1a1a3e 50%, #0d0d2b 100%);
+            color: var(--text);
             min-height: 100vh;
             padding: 20px;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        /* Animated Phospholipid Bilayer Background */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(circle at 20% 50%, rgba(0, 212, 255, 0.15) 0%, transparent 50%),
+                radial-gradient(circle at 80% 50%, rgba(255, 107, 157, 0.15) 0%, transparent 50%),
+                radial-gradient(ellipse 800px 600px at 50% 30%, rgba(0, 212, 255, 0.08) 0%, transparent 70%);
+            pointer-events: none;
+            z-index: -2;
+            animation: membraneFlow 12s ease-in-out infinite;
+        }
+
+        @keyframes membraneFlow {
+            0%, 100% { 
+                background-position: 0% 0%;
+                filter: brightness(1);
+            }
+            50% { 
+                background-position: 100% 100%;
+                filter: brightness(1.1);
+            }
+        }
+
+        /* Phospholipid Molecules */
+        .phospholipid {
+            position: fixed;
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        .phospholipid::before {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            background: radial-gradient(circle at 30% 30%, rgba(0, 212, 255, 0.6), rgba(0, 212, 255, 0.1));
+            animation: pulse 3s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { 
+                box-shadow: 0 0 10px rgba(0, 212, 255, 0.3), inset 0 0 10px rgba(0, 212, 255, 0.2);
+            }
+            50% { 
+                box-shadow: 0 0 30px rgba(0, 212, 255, 0.6), inset 0 0 15px rgba(0, 212, 255, 0.4);
+            }
+        }
+
+        @keyframes float {
+            0% { transform: translate(0, 0) rotate(0deg); }
+            50% { transform: translate(30px, -30px) rotate(180deg); }
+            100% { transform: translate(0, 0) rotate(360deg); }
+        }
+
+        @keyframes drift {
+            0% { transform: translateX(-100vw) translateY(var(--y)); }
+            100% { transform: translateX(100vw) translateY(calc(var(--y) + 30px)); }
         }
 
         .container {
-            max-width: 1400px;
+            max-width: 1600px;
             margin: 0 auto;
-            background: white;
-            border-radius: 15px;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
-            overflow: hidden;
+            position: relative;
+            z-index: 1;
         }
 
         header {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            padding: 40px 20px;
             text-align: center;
+            margin-bottom: 50px;
+            animation: slideDown 0.8s ease;
+        }
+
+        @keyframes slideDown {
+            from { opacity: 0; transform: translateY(-30px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
         header h1 {
-            font-size: 2.5em;
+            font-size: 3.5em;
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
             margin-bottom: 10px;
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+            filter: drop-shadow(0 0 20px rgba(0, 212, 255, 0.4));
+            font-weight: 700;
+            letter-spacing: 2px;
         }
 
         header .subtitle {
-            font-size: 1.2em;
-            opacity: 0.9;
+            font-size: 1.3em;
+            color: var(--text-secondary);
+            font-weight: 300;
+            letter-spacing: 1px;
         }
 
         .content {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 30px;
-            padding: 30px;
-            min-height: 600px;
+            gap: 40px;
+            padding: 0 20px;
+            animation: fadeIn 0.8s ease 0.2s both;
         }
 
-        .control-panel {
-            background: #f8f9fa;
-            padding: 25px;
-            border-radius: 10px;
-            border-left: 4px solid #667eea;
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
         }
 
-        .control-panel h2 {
-            color: #333;
-            margin-bottom: 20px;
-            font-size: 1.5em;
+        .glass-card {
+            background: var(--card);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5), 
+                        0 0 30px rgba(0, 212, 255, 0.1);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .glass-card:hover {
+            border-color: rgba(0, 212, 255, 0.5);
+            box-shadow: 0 20px 80px rgba(0, 212, 255, 0.2),
+                        0 0 50px rgba(0, 212, 255, 0.15);
+            transform: translateY(-5px);
+        }
+
+        .glass-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, rgba(0, 212, 255, 0.05) 0%, transparent 100%);
+            pointer-events: none;
+        }
+
+        .glass-card h2 {
+            font-size: 1.8em;
+            margin-bottom: 30px;
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            font-weight: 600;
+            position: relative;
+            z-index: 1;
+            filter: drop-shadow(0 0 10px rgba(0, 212, 255, 0.3));
         }
 
         .param-group {
-            margin-bottom: 20px;
-            display: flex;
-            flex-direction: column;
+            margin-bottom: 25px;
+            position: relative;
+            z-index: 1;
         }
 
         .param-group label {
-            font-weight: 600;
-            color: #555;
-            margin-bottom: 8px;
+            display: block;
             font-size: 0.95em;
+            color: var(--text-secondary);
+            margin-bottom: 12px;
+            font-weight: 500;
+            letter-spacing: 0.5px;
         }
 
         .param-group input[type="range"] {
             width: 100%;
-            height: 6px;
-            border-radius: 3px;
-            background: #ddd;
+            height: 8px;
+            border-radius: 10px;
+            background: linear-gradient(90deg, var(--primary), var(--accent));
             outline: none;
             -webkit-appearance: none;
+            appearance: none;
+            cursor: pointer;
+            box-shadow: 0 0 15px rgba(0, 212, 255, 0.3);
         }
 
         .param-group input[type="range"]::-webkit-slider-thumb {
             -webkit-appearance: none;
             appearance: none;
-            width: 18px;
-            height: 18px;
+            width: 26px;
+            height: 26px;
             border-radius: 50%;
-            background: #667eea;
+            background: linear-gradient(135deg, var(--primary), var(--accent));
             cursor: pointer;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 0 25px rgba(0, 212, 255, 0.8);
+            border: 2px solid rgba(0, 212, 255, 0.5);
+            transition: all 0.2s ease;
+        }
+
+        .param-group input[type="range"]::-webkit-slider-thumb:hover {
+            box-shadow: 0 0 40px rgba(0, 212, 255, 1);
+            transform: scale(1.3);
         }
 
         .param-group input[type="range"]::-moz-range-thumb {
-            width: 18px;
-            height: 18px;
+            width: 26px;
+            height: 26px;
             border-radius: 50%;
-            background: #667eea;
+            background: linear-gradient(135deg, var(--primary), var(--accent));
             cursor: pointer;
-            border: none;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 0 25px rgba(0, 212, 255, 0.8);
+            border: 2px solid rgba(0, 212, 255, 0.5);
+            transition: all 0.2s ease;
         }
 
         .value-display {
+            display: inline-block;
+            margin-top: 8px;
+            padding: 8px 16px;
+            background: linear-gradient(135deg, rgba(0, 212, 255, 0.15), rgba(255, 107, 157, 0.1));
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            color: var(--primary);
             font-weight: 700;
-            color: #667eea;
-            font-size: 0.95em;
-            margin-top: 5px;
+            font-size: 0.9em;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 0 15px rgba(0, 212, 255, 0.2);
         }
 
         .button-group {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 10px;
-            margin: 30px 0;
+            gap: 15px;
+            margin: 40px 0;
         }
 
         .btn {
-            padding: 12px 20px;
+            padding: 16px 32px;
             border: none;
-            border-radius: 8px;
+            border-radius: 12px;
             font-size: 1em;
             font-weight: 600;
             cursor: pointer;
             transition: all 0.3s ease;
             text-transform: uppercase;
-            letter-spacing: 0.5px;
+            letter-spacing: 1.5px;
+            position: relative;
+            overflow: hidden;
+            z-index: 1;
+        }
+
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            transition: left 0.5s;
+        }
+
+        .btn:hover::before {
+            left: 100%;
         }
 
         .btn-primary {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            color: #000;
+            box-shadow: 0 8px 25px rgba(0, 212, 255, 0.5),
+                        0 0 20px rgba(0, 212, 255, 0.3);
         }
 
         .btn-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.6);
+            box-shadow: 0 12px 35px rgba(0, 212, 255, 0.7),
+                        0 0 30px rgba(0, 212, 255, 0.5);
+            transform: translateY(-3px);
         }
 
-        .btn-primary:disabled {
-            opacity: 0.6;
+        .btn-secondary {
+            background: rgba(0, 212, 255, 0.1);
+            color: var(--primary);
+            border: 2px solid var(--primary);
+            box-shadow: 0 0 20px rgba(0, 212, 255, 0.3);
+        }
+
+        .btn-secondary:hover {
+            background: rgba(0, 212, 255, 0.2);
+            box-shadow: 0 8px 25px rgba(0, 212, 255, 0.4),
+                        0 0 30px rgba(0, 212, 255, 0.3);
+            transform: translateY(-3px);
+        }
+
+        .btn:disabled {
+            opacity: 0.5;
             cursor: not-allowed;
             transform: none;
         }
 
-        .btn-secondary {
-            background: #e9ecef;
-            color: #333;
-            border: 2px solid #667eea;
-        }
-
-        .btn-secondary:hover {
-            background: #667eea;
-            color: white;
-            transform: translateY(-2px);
-        }
-
         .info-box {
-            background: white;
-            padding: 15px;
-            border-radius: 8px;
-            border-left: 4px solid #28a745;
-            margin-top: 20px;
+            background: rgba(0, 212, 255, 0.05);
+            border-left: 4px solid var(--primary);
+            border-radius: 12px;
+            padding: 20px;
+            margin-top: 30px;
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--border);
+            box-shadow: 0 0 20px rgba(0, 212, 255, 0.1);
         }
 
         .info-box h3 {
-            color: #28a745;
-            margin-bottom: 10px;
-            font-size: 1em;
+            color: var(--primary);
+            margin-bottom: 15px;
+            font-size: 1.1em;
+            font-weight: 600;
+            filter: drop-shadow(0 0 8px rgba(0, 212, 255, 0.3));
         }
 
         .info-box ul {
@@ -184,79 +356,110 @@
         }
 
         .info-box li {
-            margin-bottom: 8px;
-            font-size: 0.9em;
-            color: #666;
-            line-height: 1.4;
+            margin-bottom: 12px;
+            font-size: 0.95em;
+            color: var(--text-secondary);
+            line-height: 1.6;
+            padding-left: 25px;
+            position: relative;
+        }
+
+        .info-box li::before {
+            content: '⚛';
+            position: absolute;
+            left: 0;
+            color: var(--accent);
+            filter: drop-shadow(0 0 5px rgba(255, 107, 157, 0.5));
         }
 
         .graph-panel {
-            background: white;
-            padding: 25px;
-            border-radius: 10px;
-            border: 2px solid #e9ecef;
             display: flex;
             flex-direction: column;
         }
 
         .graph-panel h2 {
-            color: #333;
+            font-size: 1.8em;
             margin-bottom: 20px;
-            font-size: 1.5em;
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            font-weight: 600;
+            position: relative;
+            z-index: 1;
+            filter: drop-shadow(0 0 10px rgba(0, 212, 255, 0.3));
         }
 
         #canvas {
-            border: 1px solid #ddd;
-            border-radius: 8px;
-            background: white;
+            border: 1px solid var(--border);
+            border-radius: 15px;
+            background: rgba(10, 14, 39, 0.9);
             flex-grow: 1;
-            margin-bottom: 20px;
+            margin-bottom: 25px;
+            min-height: 400px;
+            box-shadow: 0 0 30px rgba(0, 212, 255, 0.15);
         }
 
         .stats {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
             gap: 15px;
+            position: relative;
+            z-index: 1;
         }
 
         .stat-item {
-            background: #f8f9fa;
-            padding: 12px;
-            border-radius: 8px;
-            border-left: 4px solid #667eea;
-            display: flex;
-            flex-direction: column;
+            background: rgba(0, 212, 255, 0.05);
+            padding: 20px;
+            border-radius: 12px;
+            border: 1px solid var(--border);
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+            box-shadow: 0 0 20px rgba(0, 212, 255, 0.08);
+        }
+
+        .stat-item:hover {
+            border-color: var(--primary);
+            background: rgba(0, 212, 255, 0.1);
+            transform: translateY(-3px);
+            box-shadow: 0 0 30px rgba(0, 212, 255, 0.2);
         }
 
         .stat-label {
             font-size: 0.85em;
-            color: #666;
-            margin-bottom: 5px;
-            font-weight: 600;
+            color: var(--text-secondary);
+            margin-bottom: 8px;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
         }
 
         .stat-value {
-            font-size: 1.3em;
-            color: #667eea;
+            font-size: 1.8em;
+            color: var(--primary);
             font-weight: 700;
+            text-shadow: 0 0 15px rgba(0, 212, 255, 0.6);
         }
 
         footer {
-            background: #f8f9fa;
-            color: #666;
             text-align: center;
-            padding: 20px;
-            border-top: 1px solid #e9ecef;
-            font-size: 0.9em;
+            margin-top: 50px;
+            padding: 30px;
+            color: var(--text-secondary);
+            border-top: 1px solid var(--border);
+            font-size: 0.95em;
+            position: relative;
+            z-index: 1;
         }
 
         @media (max-width: 1024px) {
             .content {
                 grid-template-columns: 1fr;
+                gap: 30px;
             }
 
             header h1 {
-                font-size: 2em;
+                font-size: 2.5em;
             }
 
             .stats {
@@ -270,66 +473,97 @@
             }
 
             #canvas {
-                width: 100%;
-                height: auto;
+                min-height: 300px;
+            }
+
+            header h1 {
+                font-size: 2em;
+            }
+
+            .glass-card {
+                padding: 20px;
             }
         }
     </style>
 </head>
 <body>
+    <!-- Animated Phospholipid Bilayer Background -->
+    <script>
+        // Create floating phospholipid molecules
+        for (let i = 0; i < 15; i++) {
+            const phospholipid = document.createElement('div');
+            phospholipid.className = 'phospholipid';
+            
+            const size = Math.random() * 60 + 40;
+            const startX = Math.random() * window.innerWidth;
+            const startY = Math.random() * window.innerHeight;
+            const duration = Math.random() * 20 + 15;
+            const delay = Math.random() * 5;
+            
+            phospholipid.style.width = size + 'px';
+            phospholipid.style.height = size + 'px';
+            phospholipid.style.left = startX + 'px';
+            phospholipid.style.top = startY + 'px';
+            phospholipid.style.animation = `drift ${duration}s linear ${delay}s infinite`;
+            phospholipid.style.setProperty('--y', (Math.random() * 100 - 50) + 'px');
+            
+            document.body.appendChild(phospholipid);
+        }
+    </script>
+
     <div class="container">
         <header>
             <h1>🧠 Akciós Potenciál Szimulátor</h1>
-            <p class="subtitle">Integrate-and-Fire Neuron Modell</p>
+            <p class="subtitle">Integrate-and-Fire Neuron Model - Premium Edition</p>
         </header>
 
         <div class="content">
-            <div class="control-panel">
-                <h2>Szimuláció Paraméterei</h2>
+            <div class="glass-card">
+                <h2>⚙️ Szimuláció Paraméterei</h2>
                 
                 <div class="param-group">
-                    <label for="current">Bejövő Áram (I) [nA]:</label>
+                    <label for="current">⚡ Bejövő Áram (I)</label>
                     <input type="range" id="current" min="0" max="50" step="0.5" value="25">
                     <span class="value-display" id="currentValue">25.0 nA</span>
                 </div>
 
                 <div class="param-group">
-                    <label for="duration">Inger Hossza (ms):</label>
+                    <label for="duration">⏱️ Inger Hossza</label>
                     <input type="range" id="duration" min="10" max="500" step="10" value="200">
                     <span class="value-display" id="durationValue">200 ms</span>
                 </div>
 
                 <div class="param-group">
-                    <label for="threshold">Küszöbérték (Vth) [mV]:</label>
+                    <label for="threshold">🎯 Küszöbérték (Vth)</label>
                     <input type="range" id="threshold" min="-30" max="0" step="1" value="-20">
                     <span class="value-display" id="thresholdValue">-20 mV</span>
                 </div>
 
                 <div class="param-group">
-                    <label for="restPotential">Nyugalmi Potenciál (Vrest) [mV]:</label>
+                    <label for="restPotential">🌀 Nyugalmi Potenciál (Vrest)</label>
                     <input type="range" id="restPotential" min="-100" max="-50" step="1" value="-70">
                     <span class="value-display" id="restValue">-70 mV</span>
                 </div>
 
                 <div class="param-group">
-                    <label for="capacitance">Membránkapacitás (Cm) [µF/cm²]:</label>
+                    <label for="capacitance">🔋 Membránkapacitás (Cm)</label>
                     <input type="range" id="capacitance" min="0.5" max="5" step="0.1" value="1">
                     <span class="value-display" id="capValue">1.0 µF/cm²</span>
                 </div>
 
                 <div class="param-group">
-                    <label for="resistance">Membránellenállás (Rm) [kΩ·cm²]:</label>
+                    <label for="resistance">🛑 Membránellenállás (Rm)</label>
                     <input type="range" id="resistance" min="1000" max="100000" step="1000" value="10000">
                     <span class="value-display" id="resValue">10000 kΩ·cm²</span>
                 </div>
 
                 <div class="button-group">
-                    <button id="startBtn" class="btn btn-primary">▶ Szimuláció Indítása</button>
+                    <button id="startBtn" class="btn btn-primary">▶ Indítás</button>
                     <button id="resetBtn" class="btn btn-secondary">↻ Visszaállítás</button>
                 </div>
 
                 <div class="info-box">
-                    <h3>Biológiai háttér:</h3>
+                    <h3>📚 Biológiai Háttér</h3>
                     <ul>
                         <li><strong>Nyugalmi potenciál:</strong> A neuron normál állapota (~-70 mV)</li>
                         <li><strong>Depolarizáció:</strong> A membránpotenciál pozitívabb irányba mozdul</li>
@@ -339,20 +573,20 @@
                 </div>
             </div>
 
-            <div class="graph-panel">
-                <h2>Membránpotenciál (Vm) Időbeli Változása</h2>
+            <div class="glass-card graph-panel">
+                <h2>📊 Membránpotenciál Változása</h2>
                 <canvas id="canvas" width="800" height="400"></canvas>
                 <div class="stats">
                     <div class="stat-item">
-                        <span class="stat-label">Akciós potenciálok száma:</span>
+                        <span class="stat-label">⚡ Akciós Potenciálok</span>
                         <span class="stat-value" id="spikeCount">0</span>
                     </div>
                     <div class="stat-item">
-                        <span class="stat-label">Jelenlegi potenciál:</span>
+                        <span class="stat-label">💨 Jelenlegi Potenciál</span>
                         <span class="stat-value" id="currentVm">-70 mV</span>
                     </div>
                     <div class="stat-item">
-                        <span class="stat-label">Szimuláció időtartama:</span>
+                        <span class="stat-label">⏱️ Szimuláció Ideje</span>
                         <span class="stat-value" id="simTime">0 ms</span>
                     </div>
                 </div>
@@ -360,7 +594,7 @@
         </div>
 
         <footer>
-            <p>Az "Integrate-and-Fire" modell egy egyszerűsített neuronmodell a neurobiológiában</p>
+            <p>🧬 Az "Integrate-and-Fire" modell egy egyszerűsített neuronmodell a neurobiológiában | Foszfolipid bilayer animáció</p>
         </footer>
     </div>
 
@@ -499,7 +733,7 @@
                     if (this.neuron.time >= duration || !this.isRunning) {
                         this.isRunning = false;
                         document.getElementById('startBtn').disabled = false;
-                        document.getElementById('startBtn').textContent = '▶ Szimuláció Indítása';
+                        document.getElementById('startBtn').textContent = '▶ Indítás';
                         this.drawCanvas();
                         return;
                     }
@@ -535,10 +769,10 @@
                 const width = canvas.width - 2 * padding;
                 const height = canvas.height - 2 * padding;
 
-                ctx.fillStyle = '#ffffff';
+                ctx.fillStyle = 'rgba(10, 14, 39, 0.95)';
                 ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-                ctx.strokeStyle = '#333';
+                ctx.strokeStyle = 'rgba(0, 212, 255, 0.4)';
                 ctx.lineWidth = 2;
                 ctx.beginPath();
                 ctx.moveTo(padding, padding);
@@ -546,7 +780,7 @@
                 ctx.lineTo(canvas.width - padding, canvas.height - padding);
                 ctx.stroke();
 
-                ctx.strokeStyle = '#e9ecef';
+                ctx.strokeStyle = 'rgba(0, 212, 255, 0.1)';
                 ctx.lineWidth = 1;
                 
                 for (let i = -100; i <= 50; i += 20) {
@@ -566,7 +800,7 @@
                     ctx.stroke();
                 }
 
-                ctx.fillStyle = '#666';
+                ctx.fillStyle = 'rgba(0, 212, 255, 0.7)';
                 ctx.font = 'bold 12px Arial';
                 ctx.textAlign = 'right';
                 ctx.textBaseline = 'middle';
@@ -582,7 +816,7 @@
                     ctx.fillText(i.toFixed(0) + ' ms', x, canvas.height - padding + 15);
                 }
 
-                ctx.fillStyle = '#333';
+                ctx.fillStyle = 'rgba(0, 212, 255, 0.7)';
                 ctx.font = 'bold 14px Arial';
                 ctx.textAlign = 'center';
                 ctx.fillText('Idő (ms)', canvas.width / 2, canvas.height - 10);
@@ -593,7 +827,7 @@
                 ctx.fillText('Membránpotenciál (mV)', 0, 0);
                 ctx.restore();
 
-                ctx.strokeStyle = '#ff6b6b';
+                ctx.strokeStyle = 'rgba(255, 107, 157, 0.8)';
                 ctx.lineWidth = 2;
                 ctx.setLineDash([5, 5]);
                 const thresholdY = canvas.height - padding - ((this.neuron.Vth + 100) / 150) * height;
@@ -603,12 +837,12 @@
                 ctx.stroke();
                 ctx.setLineDash([]);
 
-                ctx.fillStyle = '#ff6b6b';
+                ctx.fillStyle = 'rgba(255, 107, 157, 0.8)';
                 ctx.font = 'bold 11px Arial';
                 ctx.textAlign = 'left';
                 ctx.fillText('Vth = ' + this.neuron.Vth + ' mV', padding + 5, thresholdY - 10);
 
-                ctx.strokeStyle = '#28a745';
+                ctx.strokeStyle = 'rgba(0, 255, 136, 0.8)';
                 ctx.lineWidth = 2;
                 ctx.setLineDash([5, 5]);
                 const restY = canvas.height - padding - ((this.neuron.Vrest + 100) / 150) * height;
@@ -618,13 +852,13 @@
                 ctx.stroke();
                 ctx.setLineDash([]);
 
-                ctx.fillStyle = '#28a745';
+                ctx.fillStyle = 'rgba(0, 255, 136, 0.8)';
                 ctx.font = 'bold 11px Arial';
                 ctx.textAlign = 'left';
                 ctx.fillText('Vrest = ' + this.neuron.Vrest + ' mV', padding + 5, restY + 10);
 
                 if (this.neuron.voltageHistory.length > 0) {
-                    ctx.strokeStyle = '#667eea';
+                    ctx.strokeStyle = 'rgba(0, 212, 255, 0.9)';
                     ctx.lineWidth = 3;
                     ctx.beginPath();
 
@@ -641,55 +875,58 @@
                     ctx.stroke();
                 }
 
-                ctx.fillStyle = '#ff6b6b';
+                ctx.fillStyle = 'rgba(255, 107, 157, 0.9)';
                 ctx.font = 'bold 12px Arial';
                 ctx.textAlign = 'center';
                 
                 this.neuron.spikeEvents.forEach((spikeTime) => {
                     const x = padding + (spikeTime / Math.max(this.neuron.timeHistory[this.neuron.timeHistory.length - 1] || 500, 500)) * width;
                     ctx.beginPath();
-                    ctx.arc(x, thresholdY, 4, 0, Math.PI * 2);
+                    ctx.arc(x, thresholdY, 6, 0, Math.PI * 2);
                     ctx.fill();
+                    ctx.strokeStyle = 'rgba(255, 107, 157, 0.5)';
+                    ctx.lineWidth = 2;
+                    ctx.stroke();
                 });
 
-                const legendX = canvas.width - 200;
-                const legendY = padding + 10;
+                const legendX = canvas.width - 250;
+                const legendY = padding + 20;
 
-                ctx.fillStyle = 'rgba(255, 255, 255, 0.9)';
-                ctx.fillRect(legendX - 10, legendY - 5, 200, 80);
-                ctx.strokeStyle = '#ddd';
+                ctx.fillStyle = 'rgba(10, 14, 39, 0.95)';
+                ctx.fillRect(legendX - 15, legendY - 10, 220, 100);
+                ctx.strokeStyle = 'rgba(0, 212, 255, 0.4)';
                 ctx.lineWidth = 1;
-                ctx.strokeRect(legendX - 10, legendY - 5, 200, 80);
+                ctx.strokeRect(legendX - 15, legendY - 10, 220, 100);
 
-                ctx.fillStyle = '#667eea';
+                ctx.strokeStyle = 'rgba(0, 212, 255, 0.9)';
                 ctx.lineWidth = 3;
                 ctx.beginPath();
                 ctx.moveTo(legendX, legendY);
                 ctx.lineTo(legendX + 20, legendY);
                 ctx.stroke();
-                ctx.fillStyle = '#333';
-                ctx.font = '12px Arial';
+                ctx.fillStyle = 'rgba(0, 212, 255, 0.9)';
+                ctx.font = '11px Arial';
                 ctx.textAlign = 'left';
-                ctx.fillText('Vm (membránpotenciál)', legendX + 30, legendY + 5);
+                ctx.fillText('Vm (potenciál)', legendX + 30, legendY + 5);
 
-                ctx.strokeStyle = '#ff6b6b';
+                ctx.strokeStyle = 'rgba(255, 107, 157, 0.8)';
                 ctx.setLineDash([5, 5]);
                 ctx.beginPath();
                 ctx.moveTo(legendX, legendY + 25);
                 ctx.lineTo(legendX + 20, legendY + 25);
                 ctx.stroke();
                 ctx.setLineDash([]);
-                ctx.fillStyle = '#333';
-                ctx.fillText('Vth (küszöbérték)', legendX + 30, legendY + 30);
+                ctx.fillStyle = 'rgba(255, 107, 157, 0.8)';
+                ctx.fillText('Vth (küszöb)', legendX + 30, legendY + 30);
 
-                ctx.strokeStyle = '#28a745';
+                ctx.strokeStyle = 'rgba(0, 255, 136, 0.8)';
                 ctx.setLineDash([5, 5]);
                 ctx.beginPath();
                 ctx.moveTo(legendX, legendY + 50);
                 ctx.lineTo(legendX + 20, legendY + 50);
                 ctx.stroke();
                 ctx.setLineDash([]);
-                ctx.fillStyle = '#333';
+                ctx.fillStyle = 'rgba(0, 255, 136, 0.8)';
                 ctx.fillText('Vrest (nyugalmi)', legendX + 30, legendY + 55);
             }
 
@@ -701,7 +938,7 @@
                 
                 this.neuron.reset();
                 document.getElementById('startBtn').disabled = false;
-                document.getElementById('startBtn').textContent = '▶ Szimuláció Indítása';
+                document.getElementById('startBtn').textContent = '▶ Indítás';
                 document.getElementById('spikeCount').textContent = '0';
                 document.getElementById('currentVm').textContent = '-70 mV';
                 document.getElementById('simTime').textContent = '0 ms';
