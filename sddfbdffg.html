@@ -1,0 +1,718 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🧠 Akciós Potenciál Szimulátor</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            overflow: hidden;
+        }
+
+        header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 40px 20px;
+            text-align: center;
+        }
+
+        header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        header .subtitle {
+            font-size: 1.2em;
+            opacity: 0.9;
+        }
+
+        .content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            padding: 30px;
+            min-height: 600px;
+        }
+
+        .control-panel {
+            background: #f8f9fa;
+            padding: 25px;
+            border-radius: 10px;
+            border-left: 4px solid #667eea;
+        }
+
+        .control-panel h2 {
+            color: #333;
+            margin-bottom: 20px;
+            font-size: 1.5em;
+        }
+
+        .param-group {
+            margin-bottom: 20px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .param-group label {
+            font-weight: 600;
+            color: #555;
+            margin-bottom: 8px;
+            font-size: 0.95em;
+        }
+
+        .param-group input[type="range"] {
+            width: 100%;
+            height: 6px;
+            border-radius: 3px;
+            background: #ddd;
+            outline: none;
+            -webkit-appearance: none;
+        }
+
+        .param-group input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            background: #667eea;
+            cursor: pointer;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+        }
+
+        .param-group input[type="range"]::-moz-range-thumb {
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            background: #667eea;
+            cursor: pointer;
+            border: none;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+        }
+
+        .value-display {
+            font-weight: 700;
+            color: #667eea;
+            font-size: 0.95em;
+            margin-top: 5px;
+        }
+
+        .button-group {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin: 30px 0;
+        }
+
+        .btn {
+            padding: 12px 20px;
+            border: none;
+            border-radius: 8px;
+            font-size: 1em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.6);
+        }
+
+        .btn-primary:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .btn-secondary {
+            background: #e9ecef;
+            color: #333;
+            border: 2px solid #667eea;
+        }
+
+        .btn-secondary:hover {
+            background: #667eea;
+            color: white;
+            transform: translateY(-2px);
+        }
+
+        .info-box {
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            border-left: 4px solid #28a745;
+            margin-top: 20px;
+        }
+
+        .info-box h3 {
+            color: #28a745;
+            margin-bottom: 10px;
+            font-size: 1em;
+        }
+
+        .info-box ul {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .info-box li {
+            margin-bottom: 8px;
+            font-size: 0.9em;
+            color: #666;
+            line-height: 1.4;
+        }
+
+        .graph-panel {
+            background: white;
+            padding: 25px;
+            border-radius: 10px;
+            border: 2px solid #e9ecef;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .graph-panel h2 {
+            color: #333;
+            margin-bottom: 20px;
+            font-size: 1.5em;
+        }
+
+        #canvas {
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            background: white;
+            flex-grow: 1;
+            margin-bottom: 20px;
+        }
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+        }
+
+        .stat-item {
+            background: #f8f9fa;
+            padding: 12px;
+            border-radius: 8px;
+            border-left: 4px solid #667eea;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .stat-label {
+            font-size: 0.85em;
+            color: #666;
+            margin-bottom: 5px;
+            font-weight: 600;
+        }
+
+        .stat-value {
+            font-size: 1.3em;
+            color: #667eea;
+            font-weight: 700;
+        }
+
+        footer {
+            background: #f8f9fa;
+            color: #666;
+            text-align: center;
+            padding: 20px;
+            border-top: 1px solid #e9ecef;
+            font-size: 0.9em;
+        }
+
+        @media (max-width: 1024px) {
+            .content {
+                grid-template-columns: 1fr;
+            }
+
+            header h1 {
+                font-size: 2em;
+            }
+
+            .stats {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .button-group {
+                grid-template-columns: 1fr;
+            }
+
+            #canvas {
+                width: 100%;
+                height: auto;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🧠 Akciós Potenciál Szimulátor</h1>
+            <p class="subtitle">Integrate-and-Fire Neuron Modell</p>
+        </header>
+
+        <div class="content">
+            <div class="control-panel">
+                <h2>Szimuláció Paraméterei</h2>
+                
+                <div class="param-group">
+                    <label for="current">Bejövő Áram (I) [nA]:</label>
+                    <input type="range" id="current" min="0" max="50" step="0.5" value="25">
+                    <span class="value-display" id="currentValue">25.0 nA</span>
+                </div>
+
+                <div class="param-group">
+                    <label for="duration">Inger Hossza (ms):</label>
+                    <input type="range" id="duration" min="10" max="500" step="10" value="200">
+                    <span class="value-display" id="durationValue">200 ms</span>
+                </div>
+
+                <div class="param-group">
+                    <label for="threshold">Küszöbérték (Vth) [mV]:</label>
+                    <input type="range" id="threshold" min="-30" max="0" step="1" value="-20">
+                    <span class="value-display" id="thresholdValue">-20 mV</span>
+                </div>
+
+                <div class="param-group">
+                    <label for="restPotential">Nyugalmi Potenciál (Vrest) [mV]:</label>
+                    <input type="range" id="restPotential" min="-100" max="-50" step="1" value="-70">
+                    <span class="value-display" id="restValue">-70 mV</span>
+                </div>
+
+                <div class="param-group">
+                    <label for="capacitance">Membránkapacitás (Cm) [µF/cm²]:</label>
+                    <input type="range" id="capacitance" min="0.5" max="5" step="0.1" value="1">
+                    <span class="value-display" id="capValue">1.0 µF/cm²</span>
+                </div>
+
+                <div class="param-group">
+                    <label for="resistance">Membránellenállás (Rm) [kΩ·cm²]:</label>
+                    <input type="range" id="resistance" min="1000" max="100000" step="1000" value="10000">
+                    <span class="value-display" id="resValue">10000 kΩ·cm²</span>
+                </div>
+
+                <div class="button-group">
+                    <button id="startBtn" class="btn btn-primary">▶ Szimuláció Indítása</button>
+                    <button id="resetBtn" class="btn btn-secondary">↻ Visszaállítás</button>
+                </div>
+
+                <div class="info-box">
+                    <h3>Biológiai háttér:</h3>
+                    <ul>
+                        <li><strong>Nyugalmi potenciál:</strong> A neuron normál állapota (~-70 mV)</li>
+                        <li><strong>Depolarizáció:</strong> A membránpotenciál pozitívabb irányba mozdul</li>
+                        <li><strong>Küszöbérték:</strong> Ha elérjük, akciós potenciál keletkezik</li>
+                        <li><strong>Akciós potenciál:</strong> A neuron elektromos "tüskéje"</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="graph-panel">
+                <h2>Membránpotenciál (Vm) Időbeli Változása</h2>
+                <canvas id="canvas" width="800" height="400"></canvas>
+                <div class="stats">
+                    <div class="stat-item">
+                        <span class="stat-label">Akciós potenciálok száma:</span>
+                        <span class="stat-value" id="spikeCount">0</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-label">Jelenlegi potenciál:</span>
+                        <span class="stat-value" id="currentVm">-70 mV</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-label">Szimuláció időtartama:</span>
+                        <span class="stat-value" id="simTime">0 ms</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <footer>
+            <p>Az "Integrate-and-Fire" modell egy egyszerűsített neuronmodell a neurobiológiában</p>
+        </footer>
+    </div>
+
+    <script>
+        class IntegrateAndFireNeuron {
+            constructor(params = {}) {
+                this.Cm = params.Cm || 1.0;
+                this.Rm = params.Rm || 10000;
+                this.Vrest = params.Vrest || -70;
+                this.Vth = params.Vth || -20;
+                this.Vpeak = 30;
+                
+                this.Vm = this.Vrest;
+                this.I = 0;
+                this.time = 0;
+                this.spikeCount = 0;
+                this.isRefractory = false;
+                this.refractoryTime = 0;
+                this.refractoryDuration = 2;
+                
+                this.timeHistory = [];
+                this.voltageHistory = [];
+                this.currentHistory = [];
+                this.spikeEvents = [];
+            }
+
+            step(currentInput, dt = 0.1) {
+                if (this.isRefractory) {
+                    this.refractoryTime -= dt;
+                    if (this.refractoryTime <= 0) {
+                        this.isRefractory = false;
+                        this.Vm = this.Vrest;
+                    } else {
+                        this.Vm += (this.Vrest - this.Vm) * (dt / this.refractoryDuration);
+                        return false;
+                    }
+                }
+
+                const dVm = (currentInput - (this.Vm - this.Vrest) / this.Rm) / this.Cm;
+                this.Vm += dVm * dt;
+
+                if (this.Vm >= this.Vth) {
+                    this.Vm = this.Vpeak;
+                    this.spikeCount++;
+                    this.isRefractory = true;
+                    this.refractoryTime = this.refractoryDuration;
+                    this.spikeEvents.push(this.time);
+                    return true;
+                }
+
+                return false;
+            }
+
+            reset() {
+                this.Vm = this.Vrest;
+                this.time = 0;
+                this.spikeCount = 0;
+                this.isRefractory = false;
+                this.timeHistory = [];
+                this.voltageHistory = [];
+                this.currentHistory = [];
+                this.spikeEvents = [];
+            }
+
+            recordData() {
+                this.timeHistory.push(this.time);
+                this.voltageHistory.push(this.Vm);
+                this.currentHistory.push(this.I);
+            }
+
+            updateParameters(params) {
+                if (params.Cm !== undefined) this.Cm = params.Cm;
+                if (params.Rm !== undefined) this.Rm = params.Rm;
+                if (params.Vrest !== undefined) this.Vrest = params.Vrest;
+                if (params.Vth !== undefined) this.Vth = params.Vth;
+            }
+        }
+
+        class NeuronSimulator {
+            constructor() {
+                this.neuron = new IntegrateAndFireNeuron();
+                this.isRunning = false;
+                this.animationId = null;
+                
+                this.initializeEventListeners();
+                this.drawCanvas();
+            }
+
+            initializeEventListeners() {
+                document.getElementById('startBtn').addEventListener('click', () => this.startSimulation());
+                document.getElementById('resetBtn').addEventListener('click', () => this.reset());
+
+                document.getElementById('current').addEventListener('input', (e) => {
+                    document.getElementById('currentValue').textContent = e.target.value + ' nA';
+                });
+
+                document.getElementById('duration').addEventListener('input', (e) => {
+                    document.getElementById('durationValue').textContent = e.target.value + ' ms';
+                });
+
+                document.getElementById('threshold').addEventListener('input', (e) => {
+                    document.getElementById('thresholdValue').textContent = e.target.value + ' mV';
+                    this.neuron.updateParameters({ Vth: parseFloat(e.target.value) });
+                });
+
+                document.getElementById('restPotential').addEventListener('input', (e) => {
+                    document.getElementById('restValue').textContent = e.target.value + ' mV';
+                    this.neuron.updateParameters({ Vrest: parseFloat(e.target.value) });
+                });
+
+                document.getElementById('capacitance').addEventListener('input', (e) => {
+                    document.getElementById('capValue').textContent = e.target.value + ' µF/cm²';
+                    this.neuron.updateParameters({ Cm: parseFloat(e.target.value) });
+                });
+
+                document.getElementById('resistance').addEventListener('input', (e) => {
+                    document.getElementById('resValue').textContent = e.target.value + ' kΩ·cm²';
+                    this.neuron.updateParameters({ Rm: parseFloat(e.target.value) });
+                });
+            }
+
+            startSimulation() {
+                if (this.isRunning) return;
+
+                this.isRunning = true;
+                document.getElementById('startBtn').disabled = true;
+                document.getElementById('startBtn').textContent = '⏸ Szimuláció Fut...';
+
+                const currentInput = parseFloat(document.getElementById('current').value);
+                const duration = parseFloat(document.getElementById('duration').value);
+
+                this.neuron.reset();
+                const dt = 0.1;
+
+                const simulate = () => {
+                    if (this.neuron.time >= duration || !this.isRunning) {
+                        this.isRunning = false;
+                        document.getElementById('startBtn').disabled = false;
+                        document.getElementById('startBtn').textContent = '▶ Szimuláció Indítása';
+                        this.drawCanvas();
+                        return;
+                    }
+
+                    if (this.neuron.time < duration) {
+                        this.neuron.I = currentInput;
+                    } else {
+                        this.neuron.I = 0;
+                    }
+
+                    this.neuron.step(this.neuron.I, dt);
+                    this.neuron.recordData();
+                    this.neuron.time += dt;
+
+                    document.getElementById('spikeCount').textContent = this.neuron.spikeCount;
+                    document.getElementById('currentVm').textContent = this.neuron.Vm.toFixed(1) + ' mV';
+                    document.getElementById('simTime').textContent = this.neuron.time.toFixed(0) + ' ms';
+
+                    if (Math.floor(this.neuron.time) % 10 === 0) {
+                        this.drawCanvas();
+                    }
+
+                    this.animationId = requestAnimationFrame(simulate);
+                };
+
+                simulate();
+            }
+
+            drawCanvas() {
+                const canvas = document.getElementById('canvas');
+                const ctx = canvas.getContext('2d');
+                const padding = 50;
+                const width = canvas.width - 2 * padding;
+                const height = canvas.height - 2 * padding;
+
+                ctx.fillStyle = '#ffffff';
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+                ctx.strokeStyle = '#333';
+                ctx.lineWidth = 2;
+                ctx.beginPath();
+                ctx.moveTo(padding, padding);
+                ctx.lineTo(padding, canvas.height - padding);
+                ctx.lineTo(canvas.width - padding, canvas.height - padding);
+                ctx.stroke();
+
+                ctx.strokeStyle = '#e9ecef';
+                ctx.lineWidth = 1;
+                
+                for (let i = -100; i <= 50; i += 20) {
+                    const y = canvas.height - padding - ((i + 100) / 150) * height;
+                    ctx.beginPath();
+                    ctx.moveTo(padding, y);
+                    ctx.lineTo(canvas.width - padding, y);
+                    ctx.stroke();
+                }
+
+                const maxTime = Math.max(500, this.neuron.timeHistory.length * 0.1 || 500);
+                for (let i = 0; i <= maxTime; i += 50) {
+                    const x = padding + (i / maxTime) * width;
+                    ctx.beginPath();
+                    ctx.moveTo(x, padding);
+                    ctx.lineTo(x, canvas.height - padding);
+                    ctx.stroke();
+                }
+
+                ctx.fillStyle = '#666';
+                ctx.font = 'bold 12px Arial';
+                ctx.textAlign = 'right';
+                ctx.textBaseline = 'middle';
+                for (let i = -100; i <= 50; i += 20) {
+                    const y = canvas.height - padding - ((i + 100) / 150) * height;
+                    ctx.fillText(i + ' mV', padding - 10, y);
+                }
+
+                ctx.textAlign = 'center';
+                ctx.textBaseline = 'top';
+                for (let i = 0; i <= maxTime; i += 50) {
+                    const x = padding + (i / maxTime) * width;
+                    ctx.fillText(i.toFixed(0) + ' ms', x, canvas.height - padding + 15);
+                }
+
+                ctx.fillStyle = '#333';
+                ctx.font = 'bold 14px Arial';
+                ctx.textAlign = 'center';
+                ctx.fillText('Idő (ms)', canvas.width / 2, canvas.height - 10);
+
+                ctx.save();
+                ctx.translate(15, canvas.height / 2);
+                ctx.rotate(-Math.PI / 2);
+                ctx.fillText('Membránpotenciál (mV)', 0, 0);
+                ctx.restore();
+
+                ctx.strokeStyle = '#ff6b6b';
+                ctx.lineWidth = 2;
+                ctx.setLineDash([5, 5]);
+                const thresholdY = canvas.height - padding - ((this.neuron.Vth + 100) / 150) * height;
+                ctx.beginPath();
+                ctx.moveTo(padding, thresholdY);
+                ctx.lineTo(canvas.width - padding, thresholdY);
+                ctx.stroke();
+                ctx.setLineDash([]);
+
+                ctx.fillStyle = '#ff6b6b';
+                ctx.font = 'bold 11px Arial';
+                ctx.textAlign = 'left';
+                ctx.fillText('Vth = ' + this.neuron.Vth + ' mV', padding + 5, thresholdY - 10);
+
+                ctx.strokeStyle = '#28a745';
+                ctx.lineWidth = 2;
+                ctx.setLineDash([5, 5]);
+                const restY = canvas.height - padding - ((this.neuron.Vrest + 100) / 150) * height;
+                ctx.beginPath();
+                ctx.moveTo(padding, restY);
+                ctx.lineTo(canvas.width - padding, restY);
+                ctx.stroke();
+                ctx.setLineDash([]);
+
+                ctx.fillStyle = '#28a745';
+                ctx.font = 'bold 11px Arial';
+                ctx.textAlign = 'left';
+                ctx.fillText('Vrest = ' + this.neuron.Vrest + ' mV', padding + 5, restY + 10);
+
+                if (this.neuron.voltageHistory.length > 0) {
+                    ctx.strokeStyle = '#667eea';
+                    ctx.lineWidth = 3;
+                    ctx.beginPath();
+
+                    for (let i = 0; i < this.neuron.voltageHistory.length; i++) {
+                        const x = padding + (i / Math.max(this.neuron.voltageHistory.length - 1, 1)) * width;
+                        const y = canvas.height - padding - ((this.neuron.voltageHistory[i] + 100) / 150) * height;
+
+                        if (i === 0) {
+                            ctx.moveTo(x, y);
+                        } else {
+                            ctx.lineTo(x, y);
+                        }
+                    }
+                    ctx.stroke();
+                }
+
+                ctx.fillStyle = '#ff6b6b';
+                ctx.font = 'bold 12px Arial';
+                ctx.textAlign = 'center';
+                
+                this.neuron.spikeEvents.forEach((spikeTime) => {
+                    const x = padding + (spikeTime / Math.max(this.neuron.timeHistory[this.neuron.timeHistory.length - 1] || 500, 500)) * width;
+                    ctx.beginPath();
+                    ctx.arc(x, thresholdY, 4, 0, Math.PI * 2);
+                    ctx.fill();
+                });
+
+                const legendX = canvas.width - 200;
+                const legendY = padding + 10;
+
+                ctx.fillStyle = 'rgba(255, 255, 255, 0.9)';
+                ctx.fillRect(legendX - 10, legendY - 5, 200, 80);
+                ctx.strokeStyle = '#ddd';
+                ctx.lineWidth = 1;
+                ctx.strokeRect(legendX - 10, legendY - 5, 200, 80);
+
+                ctx.fillStyle = '#667eea';
+                ctx.lineWidth = 3;
+                ctx.beginPath();
+                ctx.moveTo(legendX, legendY);
+                ctx.lineTo(legendX + 20, legendY);
+                ctx.stroke();
+                ctx.fillStyle = '#333';
+                ctx.font = '12px Arial';
+                ctx.textAlign = 'left';
+                ctx.fillText('Vm (membránpotenciál)', legendX + 30, legendY + 5);
+
+                ctx.strokeStyle = '#ff6b6b';
+                ctx.setLineDash([5, 5]);
+                ctx.beginPath();
+                ctx.moveTo(legendX, legendY + 25);
+                ctx.lineTo(legendX + 20, legendY + 25);
+                ctx.stroke();
+                ctx.setLineDash([]);
+                ctx.fillStyle = '#333';
+                ctx.fillText('Vth (küszöbérték)', legendX + 30, legendY + 30);
+
+                ctx.strokeStyle = '#28a745';
+                ctx.setLineDash([5, 5]);
+                ctx.beginPath();
+                ctx.moveTo(legendX, legendY + 50);
+                ctx.lineTo(legendX + 20, legendY + 50);
+                ctx.stroke();
+                ctx.setLineDash([]);
+                ctx.fillStyle = '#333';
+                ctx.fillText('Vrest (nyugalmi)', legendX + 30, legendY + 55);
+            }
+
+            reset() {
+                if (this.isRunning) {
+                    this.isRunning = false;
+                    cancelAnimationFrame(this.animationId);
+                }
+                
+                this.neuron.reset();
+                document.getElementById('startBtn').disabled = false;
+                document.getElementById('startBtn').textContent = '▶ Szimuláció Indítása';
+                document.getElementById('spikeCount').textContent = '0';
+                document.getElementById('currentVm').textContent = '-70 mV';
+                document.getElementById('simTime').textContent = '0 ms';
+                
+                this.drawCanvas();
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            new NeuronSimulator();
+        });
+    </script>
+</body>
+</html>
