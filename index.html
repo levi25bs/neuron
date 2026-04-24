@@ -6,41 +6,18 @@
     <title>Neuron Simulator</title>
     <style>
         body {
-            position: relative;
-            overflow: hidden;
-            background-color: #f0f0f0;
+            background-image: url('path/to/phospholipid-decoration.png'), url('path/to/dna-decoration.png');
+            background-size: cover;
+            color: #333;
+            font-family: Arial, sans-serif;
         }
-        .molecule {
-            position: absolute;
-            animation: float 5s infinite;
-        }
-        @keyframes float {
-            0% { transform: translateY(0); }
-            50% { transform: translateY(-20px); }
-            100% { transform: translateY(0); }
-        }
-        .phospholipid {
-            width: 50px;
-            height: 50px;
-        }
-        .dna {
-            width: 30px;
-            height: 100px;
-        }
+        /* Add any additional styling needed here */
     </style>
 </head>
 <body>
-    <div class="decorations">
-        <svg class="molecule phospholipid" style="left: 10%; top: 20%;">
-            <circle cx="25" cy="25" r="20" fill="lightblue" />
-            <circle cx="25" cy="15" r="10" fill="yellow" />
-            <circle cx="25" cy="35" r="10" fill="yellow" />
-        </svg>
-        <svg class="molecule dna" style="left: 60%; top: 50%;">
-            <path d="M 15 0 C 20 -10, 20 10, 15 0 S 10 10, 10 0 S 10 -10, 15 0" fill="none" stroke="green" stroke-width="5" />
-        </svg>
-    </div>
-    <h1>Neuron Simulator Interface</h1>
-    <p>Welcome to the neuron simulator. Enjoy the visuals of phospholipids and DNA molecules.</p>
+    <h1>Neuron Simulator</h1>
+    <p>Welcome to the neuron simulator. Explore the features and functionality.</p>
+    <!-- Maintain all original functionality and structure of the simulator -->
+    <script src="path/to/neuron-simulator.js"></script>
 </body>
 </html>
